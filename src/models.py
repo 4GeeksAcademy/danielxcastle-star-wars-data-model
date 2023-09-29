@@ -7,23 +7,44 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
+class User(Base):
+    __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
 
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
+class Characters(Base):
+    __tablename__ = 'characters'
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    weapon = Column(String(250))
+    location = Column(String(250))
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
+
+class Planets(Base):
+    __tablename__ = 'planets'
+    id = Column(Integer, primary_key=True)
+    galaxy = Column(String(250))
+    top_locations = Column(String(250))
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
+
+class Locations(Base):
+    __tablename__ = 'locations'
+    id = Column(Integer, primary_key=True)
+    planet = Column(String(250))
+    inhabitants = Column(String(250))
+    top_locations = Column(String(250))
+    planets_id = Column(Integer, ForeignKey('planets.id'))
+    planets = relationship("Planets")
+
+class Weapons(Base):
+    __tablename__ = 'weapons'
+    id = Column(Integer, primary_key=True)
+    type = Column(String(250))
+    damage = Column(Integer)
+    characters_id = Column(Integer, ForeignKey('characters.id'))
+    characters = relationship("Characters")
+
 
     def to_dict(self):
         return {}
